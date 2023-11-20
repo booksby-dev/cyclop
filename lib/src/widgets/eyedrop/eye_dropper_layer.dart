@@ -34,6 +34,7 @@ class EyeDropperModel {
 
 class EyeDrop extends InheritedWidget {
   static EyeDropperModel data = EyeDropperModel();
+  static Offset cursorOffset = Offset(0, 50);
 
   EyeDrop({required Widget child, Key? key})
       : super(
@@ -90,8 +91,8 @@ class EyeDrop extends InheritedWidget {
     data.touchable = touchable;
 
     if (data.snapshot != null) {
-      data.hoverColor = getPixelColor(data.snapshot!, offset);
-      data.hoverColors = getPixelColors(data.snapshot!, offset);
+      data.hoverColor = getPixelColor(data.snapshot!, offset - cursorOffset);
+      data.hoverColors = getPixelColors(data.snapshot!, offset - cursorOffset);
     }
 
     if (data.onColorChanged != null) {
