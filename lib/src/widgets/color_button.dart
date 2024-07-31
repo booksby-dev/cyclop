@@ -12,7 +12,7 @@ const _buttonSize = 48.0;
 
 class ColorButton extends StatefulWidget {
   final Color color;
-  final String text;
+  final String? text;
   final IconData? icon;
   final ButtonStyle? buttonStyle;
   final TextStyle? textStyle;
@@ -34,7 +34,7 @@ class ColorButton extends StatefulWidget {
   const ColorButton({
     required this.color,
     required this.onColorChanged,
-    required this.text,
+    this.text,
     this.icon,
     this.colorPickerTitles,
     this.buttonStyle,
@@ -91,8 +91,8 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         widget.icon != null ? Icon(widget.icon!, size: 16, color: Colors.grey.shade800) : const SizedBox.shrink(),
         Container(width: 24, height: 24, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.grey.shade600), color: widget.color))),
-        const SizedBox(width: 2),
-        Text(widget.text, style: widget.textStyle)
+        widget.text != null ? const SizedBox(width: 2) : const SizedBox.shrink(),
+        widget.text != null ? Text(widget.text!, style: widget.textStyle) : const SizedBox.shrink()
       ]));
 
   void _colorPick(BuildContext context) async {
