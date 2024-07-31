@@ -18,6 +18,7 @@ class EyeDropperModel {
   img.Image? snapshot;
 
   Offset? cursorPosition;
+  Offset offset = const Offset(0, 0);
 
   Color hoverColor = Colors.black;
 
@@ -34,9 +35,8 @@ class EyeDropperModel {
 
 class EyeDrop extends InheritedWidget {
   static EyeDropperModel data = EyeDropperModel();
-  static Offset cursorOffset = const Offset(0, 0);
 
-  EyeDrop({required Widget child, Key? key})
+  EyeDrop({required Widget child, Offset offset = const Offset(0, 0), Key? key})
       : super(
           key: key,
           child: RepaintBoundary(
@@ -54,7 +54,9 @@ class EyeDrop extends InheritedWidget {
               child: child,
             ),
           ),
-        );
+        ) {
+    data.offset = offset;
+  }
 
   static EyeDrop of(BuildContext context) {
     final eyeDrop = context.dependOnInheritedWidgetOfExactType<EyeDrop>();
@@ -90,8 +92,8 @@ class EyeDrop extends InheritedWidget {
     data.touchable = touchable;
 
     if (data.snapshot != null) {
-      data.hoverColor = getPixelColor(data.snapshot!, offset);
-      data.hoverColors = getPixelColors(data.snapshot!, offset);
+      data.hoverColor = getPixelColor(data.snapshot!, offset - data.offset);
+      data.hoverColors = getPixelColors(data.snapshot!, offset - data.offset);
     }
 
     if (data.onColorChanged != null) {
@@ -101,7 +103,6 @@ class EyeDrop extends InheritedWidget {
 
   void capture(
     BuildContext context,
-    Offset offset,
     ValueChanged<Color> onColorSelected,
     ValueChanged<Color>? onColorChanged,
   ) async {
@@ -120,7 +121,7 @@ class EyeDrop extends InheritedWidget {
       builder: (_) => EyeDropOverlay(
         touchable: data.touchable,
         colors: data.hoverColors,
-        cursorPosition: data.cursorPosition == null ? null : data.cursorPosition! + offset,
+        cursorPosition: data.cursorPosition == null ? null : data.cursorPosition! - data.offset,
       ),
     );
 

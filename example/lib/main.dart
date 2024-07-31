@@ -8,7 +8,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        home: EyeDrop(child: const MainScreen()),
+        home: EyeDrop(offset: Offset(100, 100), child: const MainScreen()),
         theme: ThemeData.from(
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.blueGrey,
@@ -101,7 +101,6 @@ class MainScreenState extends State<MainScreen> {
                           Colors.green,
                           Colors.blue
                         },
-                        eyeDropOffset: const Offset(100, 100),
                         onColorChanged: (value) => setState(() => backgroundColor = value),
                         onSwatchesChanged: (newSwatches) => setState(() => swatches = newSwatches),
                       ),

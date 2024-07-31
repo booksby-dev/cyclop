@@ -47,7 +47,6 @@ class ColorPicker extends StatefulWidget {
   final ColorPickerTitles titles;
   final TextStyle? titleStyle;
   final Color? highlightColor;
-  final Offset eyeDropOffset;
 
   /// close colorPicker callback
   final VoidCallback onClose;
@@ -63,7 +62,6 @@ class ColorPicker extends StatefulWidget {
     this.highlightColor,
     this.titleStyle,
     this.onEyeDropper,
-    this.eyeDropOffset = const Offset(0, 0),
     this.onKeyboard,
     this.onSwatchesUpdate,
     this.libraryColors = const {},

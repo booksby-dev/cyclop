@@ -20,15 +20,12 @@ class EyedropperButton extends StatelessWidget {
   /// hover, and the color changed callback
   final ValueChanged<Color>? onColorChanged;
 
-  final Offset eyeDropOffset;
-
   /// verify if the button is in a CanvasKit context
   bool get eyedropEnabled => js.context['flutterCanvasKit'] != null;
 
   const EyedropperButton({
     required this.onColor,
     this.onColorChanged,
-    this.eyeDropOffset = const Offset(0, 0),
     this.icon = Icons.colorize,
     this.iconColor = Colors.blueGrey,
     Key? key,
@@ -48,7 +45,7 @@ class EyedropperButton extends StatelessWidget {
   void _onEyeDropperRequest(BuildContext context) {
     try {
       debugPrint('EyedropperButton._onEyeDropperRequest... ');
-      EyeDrop.of(context).capture(context, eyeDropOffset, onColor, onColorChanged);
+      EyeDrop.of(context).capture(context, onColor, onColorChanged);
     } catch (err) {
       throw Exception('EyeDrop capture error : $err');
     }

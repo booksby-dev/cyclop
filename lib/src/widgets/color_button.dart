@@ -20,7 +20,6 @@ class ColorButton extends StatefulWidget {
   final ColorPickerConfig config;
   final Set<Color> libraryColors;
   final Set<Color> myColors;
-  final Offset eyeDropOffset;
 
   final ColorPickerTitles? colorPickerTitles;
 
@@ -47,7 +46,6 @@ class ColorButton extends StatefulWidget {
     this.libraryColors = const {},
     this.myColors = const {},
     this.highlightColor,
-    this.eyeDropOffset = const Offset(0, 0),
     Key? key,
   }) : super(key: key);
 
@@ -172,7 +170,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
   void _showEyeDropperOverlay(BuildContext context) {
     hidden = true;
     try {
-      EyeDrop.of(context).capture(context, widget.eyeDropOffset, (value) {
+      EyeDrop.of(context).capture(context, (value) {
         hidden = false;
         _onEyePick(value);
       }, null);
