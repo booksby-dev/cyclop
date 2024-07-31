@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'eye_dropper_layer.dart';
 
-const _decoration =
-    BoxDecoration(color: Colors.white24, shape: BoxShape.circle);
+const _decoration = BoxDecoration(color: Colors.white24, shape: BoxShape.circle);
 
 /// an eyeDropper standalone button
 /// should be used with a context [EyeDrop] available
@@ -18,12 +17,15 @@ class EyedropperButton extends StatelessWidget {
   /// color selection callback
   final ValueChanged<Color> onColor;
 
+  final Offset eyeDropOffset;
+
   /// hover, and the color changed callback
   final ValueChanged<Color>? onColorChanged;
 
   const EyedropperButton({
     required this.onColor,
     this.onColorChanged,
+    this.eyeDropOffset = const Offset(0, 0),
     this.icon = Icons.colorize,
     this.iconColor = Colors.black54,
     Key? key,
@@ -46,7 +48,7 @@ class EyedropperButton extends StatelessWidget {
 
   void _onEyeDropperRequest(BuildContext context) {
     try {
-      EyeDrop.of(context).capture(context, onColor, onColorChanged);
+      EyeDrop.of(context).capture(context, eyeDropOffset, onColor, onColorChanged);
     } catch (err) {
       throw Exception('EyeDrop capture error : $err');
     }

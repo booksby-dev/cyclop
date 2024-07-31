@@ -34,7 +34,7 @@ class EyeDropperModel {
 
 class EyeDrop extends InheritedWidget {
   static EyeDropperModel data = EyeDropperModel();
-  static Offset cursorOffset = const Offset(0, 50);
+  static Offset cursorOffset = const Offset(0, 0);
 
   EyeDrop({required Widget child, Key? key})
       : super(
@@ -101,6 +101,7 @@ class EyeDrop extends InheritedWidget {
 
   void capture(
     BuildContext context,
+    Offset offset,
     ValueChanged<Color> onColorSelected,
     ValueChanged<Color>? onColorChanged,
   ) async {
@@ -119,7 +120,7 @@ class EyeDrop extends InheritedWidget {
       builder: (_) => EyeDropOverlay(
         touchable: data.touchable,
         colors: data.hoverColors,
-        cursorPosition: data.cursorPosition,
+        cursorPosition: data.cursorPosition == null ? null : data.cursorPosition! + offset,
       ),
     );
 

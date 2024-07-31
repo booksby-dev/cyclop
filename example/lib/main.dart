@@ -101,6 +101,7 @@ class MainScreenState extends State<MainScreen> {
                           Colors.green,
                           Colors.blue
                         },
+                        eyeDropOffset: const Offset(100, 100),
                         onColorChanged: (value) => setState(() => backgroundColor = value),
                         onSwatchesChanged: (newSwatches) => setState(() => swatches = newSwatches),
                       ),
