@@ -40,40 +40,37 @@ class MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final bodyTextColor =
-        ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark
-            ? Colors.white70
-            : Colors.black87;
+    final bodyTextColor = ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ? Colors.white70 : Colors.black87;
 
-    final appbarTextColor =
-        ThemeData.estimateBrightnessForColor(appbarColor) == Brightness.dark
-            ? Colors.white70
-            : Colors.black87;
+    final appbarTextColor = ThemeData.estimateBrightnessForColor(appbarColor) == Brightness.dark ? Colors.white70 : Colors.black87;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text('Cyclop Demo',
-            style: textTheme.titleLarge?.copyWith(color: appbarTextColor)),
+        title: Text('Cyclop Demo', style: textTheme.titleLarge?.copyWith(color: appbarTextColor)),
         backgroundColor: appbarColor,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: Center(
               child: ColorButton(
+                text: 'Change Background Color4',
                 darkMode: true,
                 key: const Key('c2'),
                 color: appbarColor,
-                boxShape: BoxShape.rectangle,
-                swatches: swatches,
-                size: 32,
+                highlightColor: Colors.purple,
+                libraryColors: swatches,
+                myColors: {
+                  Colors.red,
+                  Colors.green,
+                  Colors.blue
+                },
                 config: const ColorPickerConfig(
                   enableOpacity: false,
                   enableLibrary: false,
                 ),
                 onColorChanged: (value) => setState(() => appbarColor = value),
-                onSwatchesChanged: (newSwatches) =>
-                    setState(() => swatches = newSwatches),
+                onSwatchesChanged: (newSwatches) => setState(() => swatches = newSwatches),
               ),
             ),
           )
@@ -94,27 +91,33 @@ class MainScreenState extends State<MainScreen> {
                   children: [
                     Center(
                       child: ColorButton(
+                        text: 'Change Background Color',
                         key: const Key('c1'),
                         color: backgroundColor,
-                        swatches: swatches,
-                        onColorChanged: (value) =>
-                            setState(() => backgroundColor = value),
-                        onSwatchesChanged: (newSwatches) =>
-                            setState(() => swatches = newSwatches),
+                        highlightColor: Colors.red,
+                        libraryColors: swatches,
+                        myColors: {
+                          Colors.red,
+                          Colors.green,
+                          Colors.blue
+                        },
+                        onColorChanged: (value) => setState(() => backgroundColor = value),
+                        onSwatchesChanged: (newSwatches) => setState(() => swatches = newSwatches),
                       ),
                     ),
                     Center(
                       child: ColorButton(
+                        text: 'Change Background Color',
                         key: const Key('c1'),
-                        size: 32,
                         color: backgroundColor,
                         config: const ColorPickerConfig(enableLibrary: false),
-                        swatches: swatches,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: backgroundColor,
-                          border: Border.all(width: 4, color: Colors.black),
-                        ),
+                        libraryColors: swatches,
+                        titleStyle: const TextStyle(fontSize: 20, color: Colors.red),
+                        myColors: {
+                          Colors.red,
+                          Colors.green,
+                          Colors.blue
+                        },
                         onColorChanged: (value) => setState(
                           () => backgroundColor = value,
                         ),
@@ -123,8 +126,7 @@ class MainScreenState extends State<MainScreen> {
                     Row(
                       children: [
                         EyedropperButton(
-                          onColor: (value) =>
-                              setState(() => backgroundColor = value),
+                          onColor: (value) => setState(() => backgroundColor = value),
                           onColorChanged: (value) => hoveredColor.value = value,
                         ),
                         ValueListenableBuilder<Color?>(
@@ -147,8 +149,7 @@ class MainScreenState extends State<MainScreen> {
                               return Dialog(
                                 child: ColorPicker(
                                   selectedColor: backgroundColor,
-                                  onColorSelected: (value) =>
-                                      setState(() => backgroundColor = value),
+                                  onColorSelected: (value) => setState(() => backgroundColor = value),
                                   config: const ColorPickerConfig(
                                     enableLibrary: false,
                                     enableEyePicker: false,

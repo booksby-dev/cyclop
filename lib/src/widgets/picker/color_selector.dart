@@ -18,12 +18,15 @@ class ColorSelector extends StatelessWidget {
 
   final ValueChanged<Color> onColorChanged;
 
+  final Color? highlightColor;
+
   final VoidCallback? onEyePick;
 
   const ColorSelector({
     required this.color,
     required this.onColorChanged,
     required this.focus,
+    this.highlightColor,
     this.onEyePick,
     this.withAlpha = false,
     this.thumbWidth = 96,
@@ -36,19 +39,12 @@ class ColorSelector extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           _buildColorThumb(),
-          HexColorField(
-            hexFocus: focus,
-            color: color,
-            withAlpha: withAlpha,
-            onColorChanged: (value) {
-              onColorChanged(value);
-            },
-          ),
+          const SizedBox(width: 10),
           if (onEyePick != null) // null if eyeDrop is disabled
-            IconButton(icon: const Icon(Icons.colorize), onPressed: onEyePick),
+            ElevatedButton(style: ButtonStyle(elevation: WidgetStateProperty.all(3), padding: WidgetStateProperty.all(const EdgeInsets.all(15))), onPressed: onEyePick, child: Icon(Icons.colorize, color: highlightColor ?? Colors.blue)),
         ],
       ),
     );

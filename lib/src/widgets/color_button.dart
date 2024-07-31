@@ -12,31 +12,40 @@ const _buttonSize = 48.0;
 
 class ColorButton extends StatefulWidget {
   final Color color;
-  final double size;
-  final BoxDecoration? decoration;
-  final BoxShape boxShape;
+  final String text;
+  final IconData? icon;
+  final ButtonStyle? buttonStyle;
+  final TextStyle? textStyle;
+  final TextStyle? titleStyle;
   final ColorPickerConfig config;
-  final Set<Color> swatches;
+  final Set<Color> libraryColors;
+  final Set<Color> myColors;
+
+  final ColorPickerTitles? colorPickerTitles;
 
   final ValueChanged<Color> onColorChanged;
 
   final ValueChanged<Set<Color>>? onSwatchesChanged;
 
-  final double elevation;
-
   final bool darkMode;
+
+  final Color? highlightColor;
 
   const ColorButton({
     required this.color,
     required this.onColorChanged,
+    required this.text,
+    this.icon,
+    this.colorPickerTitles,
+    this.buttonStyle,
+    this.textStyle,
+    this.titleStyle,
     this.onSwatchesChanged,
-    this.elevation = 3,
-    this.decoration,
     this.config = const ColorPickerConfig(),
     this.darkMode = false,
-    this.size = _buttonSize,
-    this.boxShape = BoxShape.circle,
-    this.swatches = const {},
+    this.libraryColors = const {},
+    this.myColors = const {},
+    this.highlightColor,
     Key? key,
   }) : super(key: key);
 
@@ -76,48 +85,37 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        onTapDown: (details) => _colorPick(context, details),
-        child: Material(
-          elevation: widget.elevation,
-          shape: widget.boxShape == BoxShape.circle
-              ? const CircleBorder()
-              : const RoundedRectangleBorder(),
-          child: Container(
-            width: widget.size,
-            height: widget.size,
-            decoration: widget.decoration ??
-                BoxDecoration(
-                  shape: widget.boxShape,
-                  color: widget.color,
-                  border: Border.all(width: 4, color: Colors.white),
-                ),
-          ),
-        ),
-      );
+  Widget build(BuildContext context) => OutlinedButton(
+      onPressed: () => _colorPick(context),
+      style: widget.buttonStyle,
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        widget.icon != null ? Icon(widget.icon!, size: 16, color: Colors.grey.shade800) : const SizedBox.shrink(),
+        Container(width: 24, height: 24, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.grey.shade600), color: widget.color))),
+        const SizedBox(width: 2),
+        Text(widget.text, style: widget.textStyle)
+      ]));
 
-  void _colorPick(BuildContext context, TapDownDetails details) async {
-    final selectedColor =
-        await showColorPicker(context, details.globalPosition);
+  void _colorPick(BuildContext context) async {
+    final selectedColor = await showColorPicker(context);
     widget.onColorChanged(selectedColor);
   }
 
-  Future<Color> showColorPicker(BuildContext rootContext, Offset offset) async {
+  Future<Color> showColorPicker(BuildContext rootContext) async {
     if (pickerOverlay != null) return Future.value(widget.color);
 
-    pickerOverlay = _buildPickerOverlay(offset, rootContext);
+    pickerOverlay = _buildPickerOverlay(rootContext);
 
     Overlay.of(rootContext).insert(pickerOverlay!);
 
     return Future.value(widget.color);
   }
 
-  OverlayEntry _buildPickerOverlay(Offset offset, BuildContext context) {
+  OverlayEntry _buildPickerOverlay(BuildContext context) {
     final mq = MediaQuery.of(context);
-    final onLandscape =
-        mq.size.shortestSide < 600 && mq.orientation == Orientation.landscape;
-    final pickerPosition =
-        onLandscape ? offset : calculatePickerPosition(offset, mq.size);
+
+    final Offset offset = Offset((mq.size.width / 2.0) - (pickerWidth / 2.0) - 50, (mq.size.height / 2.0));
+
+    final pickerPosition = calculatePickerPosition(offset, mq.size);
 
     return OverlayEntry(
       maintainState: true,
@@ -133,10 +131,14 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
               child: Material(
                 borderRadius: defaultBorderRadius,
                 child: ColorPicker(
+                  titles: widget.colorPickerTitles ?? const ColorPickerTitles(),
+                  highlightColor: widget.highlightColor,
+                  titleStyle: widget.titleStyle,
                   darkMode: widget.darkMode,
                   config: widget.config,
                   selectedColor: color,
-                  swatches: widget.swatches,
+                  libraryColors: widget.libraryColors,
+                  myColors: widget.myColors,
                   onClose: () {
                     pickerOverlay?.remove();
                     pickerOverlay = null;
@@ -195,8 +197,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
     final size = view.display.size;
     final keyboardTopPixels = size.height - view.viewInsets.bottom;
 
-    final newBottom =
-        (view.physicalSize.height - keyboardTopPixels) / view.devicePixelRatio;
+    final newBottom = (view.physicalSize.height - keyboardTopPixels) / view.devicePixelRatio;
 
     setState(() => bottom = newBottom);
     pickerOverlay?.markNeedsBuild();
@@ -238,13 +239,10 @@ class _DraggablePickerState extends State<_DraggablePicker> {
     final mq = MediaQuery.of(context);
     final size = mq.size;
 
-    final onLandscape =
-        mq.size.shortestSide < 600 && mq.orientation == Orientation.landscape;
+    final onLandscape = mq.size.shortestSide < 600 && mq.orientation == Orientation.landscape;
 
     return Positioned(
-      left: mq.isPhone
-          ? (size.width - pickerWidth) / 2
-          : offset.dx.clamp(0.0, size.width - pickerWidth),
+      left: mq.isPhone ? (size.width - pickerWidth) / 2 : offset.dx.clamp(0.0, size.width - pickerWidth),
       top: mq.isPhone
           ? onLandscape
               ? 0
@@ -255,6 +253,5 @@ class _DraggablePickerState extends State<_DraggablePicker> {
     );
   }
 
-  void _onDrag(DragUpdateDetails details) =>
-      setState(() => offset = offset + details.delta);
+  void _onDrag(DragUpdateDetails details) => setState(() => offset = offset + details.delta);
 }

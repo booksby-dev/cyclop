@@ -1,6 +1,6 @@
+import 'package:cyclop/cyclop.dart';
 import 'package:flutter/material.dart';
 
-import '../../../theme.dart';
 import '../../tabbar.dart';
 import 'channel_slider.dart';
 import 'hsl_sliders.dart';
@@ -14,9 +14,11 @@ class ChannelSliders extends StatefulWidget {
 
   final ValueChanged<Color> onChange;
 
-  const ChannelSliders(
-      {required this.selectedColor, required this.onChange, Key? key})
-      : super(key: key);
+  final ColorPickerTitles titles;
+
+  final Color? highlightColor;
+
+  const ChannelSliders({required this.selectedColor, required this.titles, this.highlightColor, required this.onChange, Key? key}) : super(key: key);
 
   @override
   ChannelSlidersState createState() => ChannelSlidersState();
@@ -29,19 +31,26 @@ class ChannelSlidersState extends State<ChannelSliders> {
 
   @override
   Widget build(BuildContext context) => Tabs(
-        labels: const ['HSL', 'RGB'],
+        highlightColor: widget.highlightColor,
+        labels: const [
+          'HSL',
+          'RGB'
+        ],
         views: [
-          HSLSliders(color: color, onColorChanged: widget.onChange),
-          _buildRGBSliders(),
+          Padding(padding: const EdgeInsets.all(8), child: HSLSliders(titles: widget.titles, color: color, onColorChanged: widget.onChange)),
+          Padding(padding: const EdgeInsets.all(8), child: _buildRGBSliders()),
         ],
       );
 
   Column _buildRGBSliders() => Column(
         children: [
           ChannelSlider(
-            label: Labels.red,
+            label: widget.titles.red,
             selectedColor: color,
-            colors: [color.withRed(0), color.withRed(255)],
+            colors: [
+              color.withRed(0),
+              color.withRed(255)
+            ],
             channelValueGetter: (color) => color.red / 255,
             labelGetter: (color) => '${color.red}',
             onChange: (value) => widget.onChange(
@@ -49,9 +58,12 @@ class ChannelSlidersState extends State<ChannelSliders> {
             ),
           ),
           ChannelSlider(
-            label: Labels.green,
+            label: widget.titles.green,
             selectedColor: color,
-            colors: [color.withGreen(0), color.withGreen(255)],
+            colors: [
+              color.withGreen(0),
+              color.withGreen(255)
+            ],
             channelValueGetter: (color) => color.green / 255,
             labelGetter: (color) => '${color.green}',
             onChange: (value) => widget.onChange(
@@ -59,9 +71,12 @@ class ChannelSlidersState extends State<ChannelSliders> {
             ),
           ),
           ChannelSlider(
-            label: Labels.blue,
+            label: widget.titles.blue,
             selectedColor: color,
-            colors: [color.withBlue(0), color.withBlue(255)],
+            colors: [
+              color.withBlue(0),
+              color.withBlue(255)
+            ],
             channelValueGetter: (color) => color.blue / 255,
             labelGetter: (color) => '${color.blue}',
             onChange: (value) => widget.onChange(

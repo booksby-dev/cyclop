@@ -14,9 +14,14 @@ class OpacitySlider extends StatelessWidget {
 
   final ValueChanged<double> onChange;
 
+  final String title;
+  final TextStyle? textStyle;
+
   const OpacitySlider({
     required this.opacity,
     required this.selectedColor,
+    required this.title,
+    this.textStyle,
     required this.onChange,
     Key? key,
   }) : super(key: key);
@@ -37,7 +42,7 @@ class OpacitySlider extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Text(Labels.opacity, style: textTheme.titleLarge),
+                child: Text(title, style: (textStyle ?? const TextStyle()).copyWith(fontSize: textTheme.titleSmall?.fontSize)),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -83,9 +88,7 @@ ui.Image? _gridImage;
 Future<ui.Image> getGridImage() {
   if (_gridImage != null) return Future.value(_gridImage!);
   final completer = Completer<ui.Image>();
-  const AssetImage('packages/cyclop/assets/grid.png')
-      .resolve(const ImageConfiguration())
-      .addListener(ImageStreamListener((ImageInfo info, bool _) {
+  const AssetImage('packages/cyclop/assets/grid.png').resolve(const ImageConfiguration()).addListener(ImageStreamListener((ImageInfo info, bool _) {
     _gridImage = info.image;
     completer.complete(_gridImage);
   }));

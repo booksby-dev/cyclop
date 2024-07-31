@@ -1,18 +1,17 @@
 import 'dart:math';
 
+import 'package:cyclop/src/widgets/color_picker.dart';
 import 'package:flutter/material.dart';
 
-import '../../../theme.dart';
 import '../../../utils.dart';
 import 'channel_slider.dart';
 
 class HSLSliders extends StatefulWidget {
   final Color color;
   final ValueChanged<Color> onColorChanged;
+  final ColorPickerTitles titles;
 
-  const HSLSliders(
-      {required this.color, required this.onColorChanged, Key? key})
-      : super(key: key);
+  const HSLSliders({required this.color, required this.titles, required this.onColorChanged, Key? key}) : super(key: key);
 
   @override
   HSLSlidersState createState() => HSLSlidersState();
@@ -29,8 +28,7 @@ class HSLSlidersState extends State<HSLSliders> {
 
   late double lightness;
 
-  Color get hslColor =>
-      HSLColor.fromAHSL(alpha, hue, saturation, lightness).toColor();
+  Color get hslColor => HSLColor.fromAHSL(alpha, hue, saturation, lightness).toColor();
 
   @override
   void initState() {
@@ -47,7 +45,7 @@ class HSLSlidersState extends State<HSLSliders> {
     return Column(
       children: [
         ChannelSlider(
-          label: Labels.hue,
+          label: widget.titles.hue,
           selectedColor: hslColor,
           colors: getHueGradientColors(/*saturation: saturation*/),
           channelValueGetter: (color) => max(1, hue) / 360,
@@ -58,19 +56,11 @@ class HSLSlidersState extends State<HSLSliders> {
           },
         ),
         ChannelSlider(
-          label: Labels.saturation,
+          label: widget.titles.saturation,
           selectedColor: hslColor,
           colors: [
-            hsl
-                .withSaturation(0)
-                .withLightness(lightness)
-                .withHue(hue)
-                .toColor(),
-            hsl
-                .withSaturation(1)
-                .withLightness(lightness)
-                .withHue(hue)
-                .toColor(),
+            hsl.withSaturation(0).withLightness(lightness).withHue(hue).toColor(),
+            hsl.withSaturation(1).withLightness(lightness).withHue(hue).toColor(),
           ],
           channelValueGetter: (color) => saturation,
           labelGetter: (color) => saturation.toStringAsFixed(3),
@@ -80,20 +70,12 @@ class HSLSlidersState extends State<HSLSliders> {
           },
         ),
         ChannelSlider(
-          label: Labels.light,
+          label: widget.titles.light,
           selectedColor: hslColor,
           colors: [
-            hsl
-                .withSaturation(saturation)
-                .withLightness(0)
-                .withHue(hue)
-                .toColor(),
+            hsl.withSaturation(saturation).withLightness(0).withHue(hue).toColor(),
             hsl.withSaturation(saturation).withHue(hue).toColor(),
-            hsl
-                .withSaturation(saturation)
-                .withLightness(1)
-                .withHue(hue)
-                .toColor(),
+            hsl.withSaturation(saturation).withLightness(1).withHue(hue).toColor(),
           ],
           channelValueGetter: (color) => lightness,
           labelGetter: (color) => lightness.toStringAsFixed(3),

@@ -34,7 +34,7 @@ class EyeDropperModel {
 
 class EyeDrop extends InheritedWidget {
   static EyeDropperModel data = EyeDropperModel();
-  static Offset cursorOffset = Offset(0, 50);
+  static Offset cursorOffset = const Offset(0, 50);
 
   EyeDrop({required Widget child, Key? key})
       : super(
@@ -59,8 +59,7 @@ class EyeDrop extends InheritedWidget {
   static EyeDrop of(BuildContext context) {
     final eyeDrop = context.dependOnInheritedWidgetOfExactType<EyeDrop>();
     if (eyeDrop == null) {
-      throw Exception(
-          'No EyeDrop found. You must wrap your application within an EyeDrop widget.');
+      throw Exception('No EyeDrop found. You must wrap your application within an EyeDrop widget.');
     }
     return eyeDrop;
   }
@@ -91,8 +90,8 @@ class EyeDrop extends InheritedWidget {
     data.touchable = touchable;
 
     if (data.snapshot != null) {
-      data.hoverColor = getPixelColor(data.snapshot!, offset - cursorOffset);
-      data.hoverColors = getPixelColors(data.snapshot!, offset - cursorOffset);
+      data.hoverColor = getPixelColor(data.snapshot!, offset);
+      data.hoverColors = getPixelColors(data.snapshot!, offset);
     }
 
     if (data.onColorChanged != null) {
@@ -105,8 +104,7 @@ class EyeDrop extends InheritedWidget {
     ValueChanged<Color> onColorSelected,
     ValueChanged<Color>? onColorChanged,
   ) async {
-    final renderer =
-        captureKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+    final renderer = captureKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
 
     if (renderer == null) return;
 

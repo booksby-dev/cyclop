@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Labels {
-  static const String mainTitle = 'Colors';
-  static const String opacity = 'Opacity';
-  static const String red = 'Red';
-  static const String green = 'Green';
-  static const String blue = 'Blue';
-  static const String hue = 'Hue';
-  static const String saturation = 'Saturation';
-  static const String light = 'Lightness';
-}
-
-const defaultRadius = 8.0;
+const defaultRadius = 14.0;
 
 const defaultBorderRadius = BorderRadius.all(Radius.circular(defaultRadius));
 
@@ -26,9 +15,7 @@ final lightTheme = ThemeData.light().copyWith(
         fillColor: Colors.white,
         filled: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(defaultRadius)),
+        border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(defaultRadius)),
       ),
   dialogTheme: ThemeData.light().dialogTheme.copyWith(
         backgroundColor: const Color(0xfff6f6f6),
@@ -42,37 +29,34 @@ final darkTheme = ThemeData.dark().copyWith(
     primarySwatch: Colors.cyan,
     backgroundColor: Colors.grey.shade700,
   ),
-  textSelectionTheme: ThemeData.light()
-      .textSelectionTheme
-      .copyWith(selectionColor: Colors.cyan.shade700),
+  textSelectionTheme: ThemeData.light().textSelectionTheme.copyWith(selectionColor: Colors.cyan.shade700),
   dialogTheme: ThemeData.light().dialogTheme.copyWith(
         backgroundColor: Colors.grey.shade800,
       ),
-  inputDecorationTheme:
-      lightTheme.inputDecorationTheme.copyWith(fillColor: Colors.grey.shade800),
+  inputDecorationTheme: lightTheme.inputDecorationTheme.copyWith(fillColor: Colors.grey.shade800),
   textButtonTheme: TextButtonThemeData(style: _darkTextButtonStyle),
 );
 
 final _lightTextButtonStyle = ButtonStyle(
-  shape: MaterialStateProperty.all(
+  shape: WidgetStateProperty.all(
     const RoundedRectangleBorder(borderRadius: defaultBorderRadius),
   ),
-  padding: MaterialStateProperty.all(
+  padding: WidgetStateProperty.all(
     const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
   ),
-  foregroundColor: MaterialStateProperty.all(Colors.grey.shade700),
-  overlayColor: MaterialStateProperty.all(Colors.white30),
+  foregroundColor: WidgetStateProperty.all(Colors.grey.shade700),
+  overlayColor: WidgetStateProperty.all(Colors.white30),
 );
 
 final _darkTextButtonStyle = ButtonStyle(
-  shape: MaterialStateProperty.all(
+  shape: WidgetStateProperty.all(
     const RoundedRectangleBorder(borderRadius: defaultBorderRadius),
   ),
-  padding: MaterialStateProperty.all(
+  padding: WidgetStateProperty.all(
     const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
   ),
-  foregroundColor: MaterialStateProperty.all(Colors.white70),
-  overlayColor: MaterialStateProperty.all(Colors.black12),
+  foregroundColor: WidgetStateProperty.all(Colors.white70),
+  overlayColor: WidgetStateProperty.all(Colors.black12),
 );
 
 const defaultDivider = Divider(

@@ -44,19 +44,18 @@ class SwatchLibraryState extends State<SwatchLibrary> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return GridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 8,
-      children: [
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: GridView.count(shrinkWrap: true, crossAxisCount: 8, children: [
         ...colors.take(_maxSwatch).map(_colorToSwatch),
-        if (colors.length < _maxSwatch) _buildNewColorButton(theme)
-      ],
+        // if (colors.length < _maxSwatch) _buildNewColorButton(theme)
+      ]),
     );
   }
 
-  Widget _colorToSwatch(Color color) => GestureDetector(
+  Widget _colorToSwatch(Color color) => MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
         onTap: () => widget.onColorSelected(color),
         onDoubleTap: widget.onSwatchesUpdate == null
             ? null
@@ -64,28 +63,21 @@ class SwatchLibraryState extends State<SwatchLibrary> {
                 widget.onSwatchesUpdate!(colors..remove(color));
                 setState(() {});
               },
-        child: Tooltip(
-          height: 52,
-          showDuration: 0.seconds,
-          message: 'Tap to select /\nDouble Tap to remove',
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(4),
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            foregroundDecoration: BoxDecoration(
-              border: color == widget.currentColor
-                  ? Border.all(color: Colors.white, width: 3)
-                  : null,
-              borderRadius: BorderRadius.circular(4),
-            ),
+        child: Container(
+          margin: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(4),
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          foregroundDecoration: BoxDecoration(
+            border: color == widget.currentColor ? Border.all(color: Colors.white, width: 3) : null,
+            borderRadius: BorderRadius.circular(4),
           ),
         ),
-      );
+      ));
 
   Container _buildNewColorButton(ThemeData theme) {
     return Container(
@@ -95,8 +87,7 @@ class SwatchLibraryState extends State<SwatchLibrary> {
       ),
       child: Center(
         child: IconButton(
-          color:
-              widget.canAdd ? theme.colorScheme.primary : theme.disabledColor,
+          color: widget.canAdd ? theme.colorScheme.primary : theme.disabledColor,
           icon: const Icon(Icons.add),
           onPressed: widget.canAdd && widget.onSwatchesUpdate != null
               ? () {
