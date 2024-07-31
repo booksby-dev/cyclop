@@ -67,7 +67,7 @@ class MainScreenState extends State<MainScreen> {
                 },
                 config: const ColorPickerConfig(
                   enableOpacity: false,
-                  enableLibrary: false,
+                  enableMyColors: false,
                 ),
                 onColorChanged: (value) => setState(() => appbarColor = value),
                 onSwatchesChanged: (newSwatches) => setState(() => swatches = newSwatches),
@@ -110,7 +110,7 @@ class MainScreenState extends State<MainScreen> {
                         text: 'Change Background Color',
                         key: const Key('c1'),
                         color: backgroundColor,
-                        config: const ColorPickerConfig(enableLibrary: false),
+                        config: const ColorPickerConfig(enableMyColors: false),
                         libraryColors: swatches,
                         titleStyle: const TextStyle(fontSize: 20, color: Colors.red),
                         myColors: {
@@ -151,7 +151,7 @@ class MainScreenState extends State<MainScreen> {
                                   selectedColor: backgroundColor,
                                   onColorSelected: (value) => setState(() => backgroundColor = value),
                                   config: const ColorPickerConfig(
-                                    enableLibrary: false,
+                                    enableMyColors: false,
                                     enableEyePicker: false,
                                   ),
                                   onClose: Navigator.of(context).pop,

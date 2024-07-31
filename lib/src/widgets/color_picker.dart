@@ -132,70 +132,78 @@ class ColorPickerState extends State<ColorPicker> {
                 MainTitle(title: widget.titles.title, titleStyle: widget.titleStyle, onClose: widget.onClose),
                 Flexible(
                   fit: FlexFit.loose,
-                  child: Tabs(highlightColor: widget.highlightColor, labels: [
-                    widget.titles.library,
-                    widget.titles.myColors,
-                    widget.titles.advanced
-                  ], views: [
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: SwatchLibrary(
-                          colors: widget.libraryColors,
-                          currentColor: selectedColor,
-                          onSwatchesUpdate: widget.onSwatchesUpdate,
-                          onColorSelected: onColorChanged,
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: SwatchLibrary(
-                          colors: widget.myColors,
-                          currentColor: selectedColor,
-                          onSwatchesUpdate: widget.onSwatchesUpdate,
-                          onColorSelected: onColorChanged,
-                        )),
-                    Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        ChannelSliders(
-                          titles: widget.titles,
-                          selectedColor: selectedColor,
-                          highlightColor: widget.highlightColor,
-                          onChange: onColorChanged,
-                        ),
+                  child: Tabs(
+                      highlightColor: widget.highlightColor,
+                      labels: widget.config.enableMyColors
+                          ? [
+                              widget.titles.library,
+                              widget.titles.myColors,
+                              widget.titles.advanced
+                            ]
+                          : [
+                              widget.titles.library,
+                              widget.titles.advanced
+                            ],
+                      views: [
                         Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: RepaintBoundary(
-                                child: Column(children: [
-                              if (widget.config.enableOpacity)
-                                Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: OpacitySlider(
-                                      selectedColor: selectedColor,
-                                      title: widget.titles.opacity,
-                                      opacity: selectedColor.opacity,
-                                      onChange: _onOpacityChange,
-                                    )),
-                              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0, bottom: 4),
-                                  child: Text(widget.titles.hex, style: (const TextStyle()).copyWith(fontSize: theme.textTheme.titleSmall?.fontSize)),
-                                ),
-                                Row(mainAxisSize: MainAxisSize.max, children: [
-                                  Expanded(
-                                      child: HexColorField(
-                                    color: selectedColor,
-                                    hexFocus: hexFieldFocus,
-                                    withAlpha: widget.config.enableOpacity,
-                                    onColorChanged: (value) {
-                                      onColorChanged(value);
-                                    },
-                                  )),
-                                ])
-                              ])
-                            ])))
-                      ],
-                    ),
-                  ]),
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: SwatchLibrary(
+                              colors: widget.libraryColors,
+                              currentColor: selectedColor,
+                              onSwatchesUpdate: widget.onSwatchesUpdate,
+                              onColorSelected: onColorChanged,
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: SwatchLibrary(
+                              colors: widget.myColors,
+                              currentColor: selectedColor,
+                              onSwatchesUpdate: widget.onSwatchesUpdate,
+                              onColorSelected: onColorChanged,
+                            )),
+                        Column(
+                          children: [
+                            const SizedBox(height: 8),
+                            ChannelSliders(
+                              titles: widget.titles,
+                              selectedColor: selectedColor,
+                              highlightColor: widget.highlightColor,
+                              onChange: onColorChanged,
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: RepaintBoundary(
+                                    child: Column(children: [
+                                  if (widget.config.enableOpacity)
+                                    Padding(
+                                        padding: const EdgeInsets.only(bottom: 12),
+                                        child: OpacitySlider(
+                                          selectedColor: selectedColor,
+                                          title: widget.titles.opacity,
+                                          opacity: selectedColor.opacity,
+                                          onChange: _onOpacityChange,
+                                        )),
+                                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, bottom: 4),
+                                      child: Text(widget.titles.hex, style: (const TextStyle()).copyWith(fontSize: theme.textTheme.titleSmall?.fontSize)),
+                                    ),
+                                    Row(mainAxisSize: MainAxisSize.max, children: [
+                                      Expanded(
+                                          child: HexColorField(
+                                        color: selectedColor,
+                                        hexFocus: hexFieldFocus,
+                                        withAlpha: widget.config.enableOpacity,
+                                        onColorChanged: (value) {
+                                          onColorChanged(value);
+                                        },
+                                      )),
+                                    ])
+                                  ])
+                                ])))
+                          ],
+                        ),
+                      ]),
                 ),
                 defaultDivider,
                 ColorSelector(

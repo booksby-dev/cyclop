@@ -68,7 +68,7 @@ ColorButton(
   color: color1,
   config: ColorPickerConfig(
     this.enableOpacity = true,
-    this.enableLibrary = false,
+    this.enableMyColors = false,
     this.enableEyePicker = true,
   ),
   boxShape: BoxShape.rectangle, // default : circle
