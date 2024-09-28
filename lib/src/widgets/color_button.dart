@@ -13,8 +13,6 @@ const _buttonSize = 48.0;
 class ColorButton extends StatefulWidget {
   final Color color;
   final String? text;
-  final IconData? icon;
-  final ButtonStyle? buttonStyle;
   final TextStyle? textStyle;
   final TextStyle? titleStyle;
   final ColorPickerConfig config;
@@ -35,9 +33,7 @@ class ColorButton extends StatefulWidget {
     required this.color,
     required this.onColorChanged,
     this.text,
-    this.icon,
     this.colorPickerTitles,
-    this.buttonStyle,
     this.textStyle,
     this.titleStyle,
     this.onSwatchesChanged,
@@ -85,14 +81,12 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) => OutlinedButton(
-      onPressed: () => _colorPick(context),
-      style: widget.buttonStyle,
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        widget.icon != null ? Icon(widget.icon!, size: 16, color: Colors.grey.shade800) : const SizedBox.shrink(),
-        Container(width: 24, height: 24, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.grey.shade600), color: widget.color))),
-        widget.text != null ? const SizedBox(width: 2) : const SizedBox.shrink(),
-        widget.text != null ? Text(widget.text!, style: widget.textStyle) : const SizedBox.shrink()
+  Widget build(BuildContext context) => InkWell(
+      onTap: () => _colorPick(context),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Icon(Icons.add_box_outlined, size: widget.textStyle?.fontSize ?? 14, color: widget.textStyle?.color ?? Colors.grey.shade800),
+        widget.text != null ? const SizedBox(height: 4) : const SizedBox.shrink(),
+        widget.text != null ? Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle) : const SizedBox.shrink()
       ]));
 
   void _colorPick(BuildContext context) async {
