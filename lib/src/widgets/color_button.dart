@@ -14,6 +14,7 @@ class ColorButton extends StatefulWidget {
   final Color color;
   final String? text;
   final double iconSize;
+  final BoxShape? shape;
   final Border? iconBorder;
   final TextStyle? textStyle;
   final TextStyle? titleStyle;
@@ -37,6 +38,7 @@ class ColorButton extends StatefulWidget {
     this.text,
     this.iconSize = 22,
     this.iconBorder,
+    this.shape,
     this.colorPickerTitles,
     this.textStyle,
     this.titleStyle,
@@ -88,7 +90,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
   Widget build(BuildContext context) => InkWell(
       onTap: () => _colorPick(context),
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(width: widget.iconSize, height: widget.iconSize, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: BoxShape.circle, border: widget.iconBorder, color: widget.color))),
+        Container(width: widget.iconSize, height: widget.iconSize, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: widget.shape ?? BoxShape.circle, border: widget.iconBorder, color: widget.color))),
         widget.text != null ? const SizedBox(height: 4) : const SizedBox.shrink(),
         widget.text != null ? Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle) : const SizedBox.shrink()
       ]));
