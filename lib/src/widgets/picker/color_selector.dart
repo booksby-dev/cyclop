@@ -49,7 +49,7 @@ class ColorSelector extends StatelessWidget {
           if (onEyePick != null) // null if eyeDrop is disabled
             ElevatedButton(style: ButtonStyle(elevation: WidgetStateProperty.all(3), padding: WidgetStateProperty.all(const EdgeInsets.all(15))), onPressed: onEyePick, child: Icon(Icons.colorize, color: highlightColor ?? Colors.blue)),
           if (defaultColor != null) const SizedBox(width: 10),
-          if (defaultColor != null) ElevatedButton(style: ButtonStyle(elevation: WidgetStateProperty.all(3), backgroundColor: WidgetStatePropertyAll(defaultColor), padding: WidgetStateProperty.all(const EdgeInsets.all(15))), onPressed: () => onColorChanged(defaultColor!), child: Icon(Icons.undo, color: highlightColor ?? Colors.blue)),
+          if (defaultColor != null) ElevatedButton(style: ButtonStyle(elevation: WidgetStateProperty.all(3), backgroundColor: WidgetStatePropertyAll(defaultColor!.opacity < 1 ? Colors.white : defaultColor), padding: WidgetStateProperty.all(const EdgeInsets.all(15))), onPressed: () => onColorChanged(defaultColor!), child: Icon(Icons.undo, color: highlightColor ?? Colors.blue)),
         ],
       ),
     );
