@@ -94,7 +94,10 @@ class MainScreenState extends State<MainScreen> {
                         text: 'Change Background Color',
                         key: const Key('c1'),
                         color: backgroundColor,
+                        iconBorder: Border.all(color: Colors.red),
                         highlightColor: Colors.red,
+                        iconSize: 40,
+                        defaultColor: Colors.green,
                         libraryColors: swatches,
                         myColors: {
                           Colors.red,

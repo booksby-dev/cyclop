@@ -31,6 +31,7 @@ class ColorPicker extends StatefulWidget {
   final Set<Color> myColors;
 
   final bool darkMode;
+  final Color? defaultColor;
 
   /// colorPicker configuration
   final ColorPickerConfig config;
@@ -64,6 +65,7 @@ class ColorPicker extends StatefulWidget {
     this.onEyeDropper,
     this.onKeyboard,
     this.onSwatchesUpdate,
+    this.defaultColor,
     this.libraryColors = const {},
     this.myColors = const {},
     this.darkMode = false,
@@ -204,10 +206,11 @@ class ColorPickerState extends State<ColorPicker> {
                   withAlpha: widget.config.enableOpacity,
                   thumbWidth: 96,
                   highlightColor: widget.highlightColor,
+                  defaultColor: widget.defaultColor,
                   onColorChanged: widget.onColorSelected,
                   onEyePick: widget.config.enableEyePicker ? widget.onEyeDropper : null,
                   focus: hexFieldFocus,
-                )
+                ),
               ])));
         },
       ),

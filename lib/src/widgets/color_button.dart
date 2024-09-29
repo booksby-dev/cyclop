@@ -19,6 +19,7 @@ class ColorButton extends StatefulWidget {
   final Border? iconBorder;
   final TextStyle? textStyle;
   final TextStyle? titleStyle;
+  final Color? defaultColor;
   final ColorPickerConfig config;
   final Set<Color> libraryColors;
   final Set<Color> myColors;
@@ -44,6 +45,7 @@ class ColorButton extends StatefulWidget {
     this.colorPickerTitles,
     this.textStyle,
     this.titleStyle,
+    this.defaultColor,
     this.onSwatchesChanged,
     this.config = const ColorPickerConfig(),
     this.darkMode = false,
@@ -143,6 +145,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
                   darkMode: widget.darkMode,
                   config: widget.config,
                   selectedColor: color,
+                  defaultColor: widget.defaultColor,
                   libraryColors: widget.libraryColors,
                   myColors: widget.myColors,
                   onClose: () {
