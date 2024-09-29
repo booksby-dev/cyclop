@@ -89,13 +89,17 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) => InkWell(
-      onTap: () => _colorPick(context),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Container(width: widget.iconSize, height: widget.iconSize, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: widget.shape ?? BoxShape.circle, borderRadius: widget.borderRadius ?? BorderRadius.zero, border: widget.iconBorder, color: widget.color))),
-        widget.text != null ? const SizedBox(height: 4) : const SizedBox.shrink(),
-        widget.text != null ? Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle) : const SizedBox.shrink()
-      ]));
+  Widget build(BuildContext context) {
+    final shape = widget.shape ?? BoxShape.circle;
+
+    return InkWell(
+        onTap: () => _colorPick(context),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Container(width: widget.iconSize, height: widget.iconSize, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: shape, borderRadius: shape == BoxShape.circle ? null : widget.borderRadius ?? BorderRadius.zero, border: widget.iconBorder, color: widget.color))),
+          widget.text != null ? const SizedBox(height: 4) : const SizedBox.shrink(),
+          widget.text != null ? Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle) : const SizedBox.shrink()
+        ]));
+  }
 
   void _colorPick(BuildContext context) async {
     final selectedColor = await showColorPicker(context);
