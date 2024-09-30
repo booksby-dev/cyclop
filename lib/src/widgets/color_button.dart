@@ -17,6 +17,7 @@ class ColorButton extends StatefulWidget {
   final BoxShape? shape;
   final BorderRadius? borderRadius;
   final Border? iconBorder;
+  final ColorButtonController? controller;
   final TextStyle? textStyle;
   final TextStyle? titleStyle;
   final Color? defaultColor;
@@ -34,7 +35,7 @@ class ColorButton extends StatefulWidget {
 
   final Color? highlightColor;
 
-  const ColorButton({
+  ColorButton({
     required this.color,
     required this.onColorChanged,
     this.text,
@@ -43,6 +44,7 @@ class ColorButton extends StatefulWidget {
     this.shape,
     this.borderRadius,
     this.colorPickerTitles,
+    this.controller,
     this.textStyle,
     this.titleStyle,
     this.defaultColor,
@@ -56,7 +58,21 @@ class ColorButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  ColorButtonState createState() => ColorButtonState();
+  // ignore: no_logic_in_create_state
+  State<StatefulWidget> createState() {
+    ColorButtonState buttonState = ColorButtonState();
+    controller?.state = buttonState;
+    return buttonState;
+  }
+}
+
+class ColorButtonController {
+  ColorButtonState? state;
+
+  void close() {
+    state?.pickerOverlay?.remove();
+    state?.pickerOverlay = null;
+  }
 }
 
 class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
@@ -126,7 +142,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
     final pickerPosition = calculatePickerPosition(offset, mq.size);
 
     return OverlayEntry(
-      maintainState: false,
+      maintainState: true,
       builder: (c) {
         return _DraggablePicker(
           initialOffset: pickerPosition,

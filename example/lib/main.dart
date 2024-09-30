@@ -36,6 +36,8 @@ class MainScreenState extends State<MainScreen> {
 
   final ValueNotifier<Color?> hoveredColor = ValueNotifier<Color?>(null);
 
+  final controller = ColorButtonController();
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -110,8 +112,9 @@ class MainScreenState extends State<MainScreen> {
                     ),
                     Center(
                       child: ColorButton(
-                        text: 'Change Background Color',
+                        text: 'Change Background Color1',
                         key: const Key('c1'),
+                        controller: controller,
                         color: backgroundColor,
                         config: const ColorPickerConfig(enableMyColors: false),
                         libraryColors: swatches,
@@ -126,6 +129,11 @@ class MainScreenState extends State<MainScreen> {
                         ),
                       ),
                     ),
+                    TextButton(
+                        onPressed: () {
+                          controller.close();
+                        },
+                        child: Text("Close")),
                     Row(
                       children: [
                         EyedropperButton(
