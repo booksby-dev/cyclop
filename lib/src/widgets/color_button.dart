@@ -126,7 +126,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
     final pickerPosition = calculatePickerPosition(offset, mq.size);
 
     return OverlayEntry(
-      maintainState: true,
+      maintainState: false,
       builder: (c) {
         return _DraggablePicker(
           initialOffset: pickerPosition,
