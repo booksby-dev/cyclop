@@ -207,6 +207,7 @@ class ColorPickerState extends State<ColorPicker> {
                   thumbWidth: 96,
                   highlightColor: widget.highlightColor,
                   defaultColor: widget.defaultColor,
+                  undoText: widget.titles.undo,
                   onColorChanged: widget.onColorSelected,
                   onEyePick: widget.config.enableEyePicker ? widget.onEyeDropper : null,
                   focus: hexFieldFocus,
@@ -233,6 +234,7 @@ class ColorPickerTitles {
   final String green;
   final String blue;
   final String hex;
+  final String undo;
 
-  const ColorPickerTitles({this.title = 'Colors', this.library = 'Popular Colors', this.myColors = 'My Colors', this.advanced = 'Advanced', this.hue = 'Hue', this.saturation = 'Saturation', this.light = 'Lightness', this.opacity = 'Opacity', this.red = 'Red', this.green = 'Green', this.blue = 'Blue', this.hex = 'Hex Value'});
+  const ColorPickerTitles({this.title = 'Colors', this.library = 'Popular Colors', this.myColors = 'My Colors', this.advanced = 'Advanced', this.hue = 'Hue', this.saturation = 'Saturation', this.light = 'Lightness', this.opacity = 'Opacity', this.red = 'Red', this.green = 'Green', this.blue = 'Blue', this.hex = 'Hex Value', this.undo = 'Undo'});
 }
