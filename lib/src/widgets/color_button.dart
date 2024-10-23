@@ -21,7 +21,7 @@ class ColorButton extends StatefulWidget {
   final TextStyle? textStyle;
   final TextStyle? titleStyle;
   final Color? defaultColor;
-  final ColorPickerConfig config;
+  final ColorPickerConfig? config;
   final Set<Color> libraryColors;
   final Set<Color> myColors;
 
@@ -35,7 +35,7 @@ class ColorButton extends StatefulWidget {
 
   final Color? highlightColor;
 
-  ColorButton({
+  const ColorButton({
     required this.color,
     required this.onColorChanged,
     this.text,
@@ -49,7 +49,7 @@ class ColorButton extends StatefulWidget {
     this.titleStyle,
     this.defaultColor,
     this.onSwatchesChanged,
-    this.config = const ColorPickerConfig(),
+    this.config,
     this.darkMode = false,
     this.libraryColors = const {},
     this.myColors = const {},
@@ -141,6 +141,8 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
 
     final pickerPosition = calculatePickerPosition(offset, mq.size);
 
+    print("ColorButton: ${widget.config} ${widget.config?.enableEyePicker}");
+
     return OverlayEntry(
       maintainState: true,
       builder: (c) {
@@ -159,7 +161,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
                   highlightColor: widget.highlightColor,
                   titleStyle: widget.titleStyle,
                   darkMode: widget.darkMode,
-                  config: widget.config,
+                  config: widget.config ?? const ColorPickerConfig(),
                   selectedColor: color,
                   defaultColor: widget.defaultColor,
                   libraryColors: widget.libraryColors,
