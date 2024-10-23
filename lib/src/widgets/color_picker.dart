@@ -116,6 +116,8 @@ class ColorPickerState extends State<ColorPicker> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("ColorPicker: ${widget.config.enableEyePicker} ${widget.onEyeDropper}");
+
     return Theme(
       data: widget.darkMode ? darkTheme : lightTheme,
       child: Builder(
