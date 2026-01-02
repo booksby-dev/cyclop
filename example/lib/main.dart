@@ -28,9 +28,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> {
-  Color appbarColor = Colors.blueGrey;
+  Color? appbarColor = Colors.blueGrey;
 
-  Color backgroundColor = Colors.grey.shade200;
+  Color? backgroundColor = Colors.grey.shade200;
 
   Set<Color> swatches = Colors.primaries.map((e) => Color(e.value)).toSet();
 
@@ -42,15 +42,15 @@ class MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final bodyTextColor = ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark ? Colors.white70 : Colors.black87;
+    final bodyTextColor = ThemeData.estimateBrightnessForColor(backgroundColor ?? Colors.white) == Brightness.dark ? Colors.white70 : Colors.black87;
 
-    final appbarTextColor = ThemeData.estimateBrightnessForColor(appbarColor) == Brightness.dark ? Colors.white70 : Colors.black87;
+    final appbarTextColor = ThemeData.estimateBrightnessForColor(appbarColor ?? Colors.blueGrey) == Brightness.dark ? Colors.white70 : Colors.black87;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         title: Text('Cyclop Demo', style: textTheme.titleLarge?.copyWith(color: appbarTextColor)),
-        backgroundColor: appbarColor,
+        backgroundColor: appbarColor ?? Colors.blueGrey,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -58,8 +58,9 @@ class MainScreenState extends State<MainScreen> {
               child: ColorButton(
                 text: 'Change Background Color4',
                 darkMode: true,
+                toggleMode: true,
                 key: const Key('c2'),
-                color: appbarColor,
+                color: null,
                 highlightColor: Colors.purple,
                 libraryColors: swatches,
                 myColors: {
@@ -112,21 +113,13 @@ class MainScreenState extends State<MainScreen> {
                     ),
                     Center(
                       child: ColorButton(
-                        text: 'Change Background Color1',
-                        key: const Key('c1'),
-                        controller: controller,
+                        text: 'Toggle Background Color',
+                        key: const Key('c3'),
                         color: backgroundColor,
+                        toggleMode: true,
                         config: const ColorPickerConfig(enableMyColors: false),
                         libraryColors: swatches,
-                        titleStyle: const TextStyle(fontSize: 20, color: Colors.red),
-                        myColors: {
-                          Colors.red,
-                          Colors.green,
-                          Colors.blue
-                        },
-                        onColorChanged: (value) => setState(
-                          () => backgroundColor = value,
-                        ),
+                        onColorChanged: (value) => setState(() => backgroundColor = value),
                       ),
                     ),
                     TextButton(
@@ -159,7 +152,7 @@ class MainScreenState extends State<MainScreen> {
                             builder: (context) {
                               return Dialog(
                                 child: ColorPicker(
-                                  selectedColor: backgroundColor,
+                                  selectedColor: backgroundColor ?? Colors.white,
                                   onColorSelected: (value) => setState(() => backgroundColor = value),
                                   config: const ColorPickerConfig(
                                     enableMyColors: false,

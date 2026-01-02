@@ -11,7 +11,7 @@ import 'picker_config.dart' if (dart.library.js) 'picker_config_web.dart';
 const _buttonSize = 48.0;
 
 class ColorButton extends StatefulWidget {
-  final Color color;
+  final Color? color;
   final String? text;
   final double iconSize;
   final BoxShape? shape;
@@ -27,7 +27,7 @@ class ColorButton extends StatefulWidget {
 
   final ColorPickerTitles? colorPickerTitles;
 
-  final ValueChanged<Color> onColorChanged;
+  final ValueChanged<Color?> onColorChanged;
 
   final ValueChanged<Set<Color>>? onSwatchesChanged;
 
@@ -35,8 +35,10 @@ class ColorButton extends StatefulWidget {
 
   final Color? highlightColor;
 
+  final bool toggleMode;
+
   const ColorButton({
-    required this.color,
+    this.color,
     required this.onColorChanged,
     this.text,
     this.iconSize = 22,
@@ -54,6 +56,7 @@ class ColorButton extends StatefulWidget {
     this.libraryColors = const {},
     this.myColors = const {},
     this.highlightColor,
+    this.toggleMode = false,
     Key? key,
   }) : super(key: key);
 
@@ -78,7 +81,7 @@ class ColorButtonController {
 class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
   OverlayEntry? pickerOverlay;
 
-  late Color color;
+  late Color? color;
 
   // hide the palette during eyedropping
   bool hidden = false;
@@ -113,25 +116,56 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
     return InkWell(
         onTap: () => _colorPick(context),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Container(width: widget.iconSize, height: widget.iconSize, padding: const EdgeInsets.all(4), child: Container(decoration: BoxDecoration(shape: shape, borderRadius: shape == BoxShape.circle ? null : widget.borderRadius ?? BorderRadius.zero, border: widget.iconBorder, color: widget.color))),
+          Container(
+              width: widget.iconSize,
+              height: widget.iconSize,
+              padding: const EdgeInsets.all(4),
+              child: Container(
+                  decoration: BoxDecoration(
+                      shape: shape,
+                      borderRadius: shape == BoxShape.circle ? null : widget.borderRadius ?? BorderRadius.zero,
+                      border: widget.iconBorder ?? (color == null ? Border.all(color: widget.darkMode ? Colors.white24 : Colors.black26) : null),
+                      color: color),
+                  child: color == null
+                      ? Center(
+                          child: Transform.rotate(
+                            angle: pi / 4,
+                            child: Container(
+                              width: widget.iconSize,
+                              height: 1,
+                              color: widget.darkMode ? Colors.white24 : Colors.black26,
+                            ),
+                          ),
+                        )
+                      : null)),
           widget.text != null ? const SizedBox(height: 4) : const SizedBox.shrink(),
           widget.text != null ? Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle) : const SizedBox.shrink()
         ]));
   }
 
   void _colorPick(BuildContext context) async {
+    debugPrint("ColorButton: ${widget.toggleMode} ${color}");
+    if (widget.toggleMode && color != null) {
+      setState(() {
+        color = null;
+      });
+      widget.onColorChanged(null);
+      return;
+    }
     final selectedColor = await showColorPicker(context);
-    widget.onColorChanged(selectedColor);
+    if (selectedColor != null) {
+      widget.onColorChanged(selectedColor);
+    }
   }
 
-  Future<Color> showColorPicker(BuildContext rootContext) async {
-    if (pickerOverlay != null) return Future.value(widget.color);
+  Future<Color?> showColorPicker(BuildContext rootContext) async {
+    if (pickerOverlay != null) return Future.value(color);
 
     pickerOverlay = _buildPickerOverlay(rootContext);
 
     Overlay.of(rootContext).insert(pickerOverlay!);
 
-    return Future.value(widget.color);
+    return Future.value(color);
   }
 
   OverlayEntry _buildPickerOverlay(BuildContext context) {
@@ -162,7 +196,7 @@ class ColorButtonState extends State<ColorButton> with WidgetsBindingObserver {
                   titleStyle: widget.titleStyle,
                   darkMode: widget.darkMode,
                   config: widget.config ?? const ColorPickerConfig(),
-                  selectedColor: color,
+                  selectedColor: color ?? widget.defaultColor ?? Colors.white,
                   defaultColor: widget.defaultColor,
                   libraryColors: widget.libraryColors,
                   myColors: widget.myColors,
